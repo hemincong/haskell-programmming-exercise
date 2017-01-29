@@ -1,28 +1,27 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FlexibleInstances #-}
 
-module Types where
+module TooMany where
 
 class TooMany a where
     tooMany :: a -> Bool
 
 instance TooMany Int where
-    tooMany n = n > 42
+    tooMany n = n > 42 
 
-newtype Goats = Goats Int deriving (TooMany, Eq, Show)
+newtype Goats = Goats Int deriving Show
 
-newtype Goatxx = Goatxx (Int, String) deriving(Eq, Show)
-
-instance TooMany Goatxx where
-    tooMany (Goatxx(n, s)) = n > 42
+instance TooMany Goats where
+    tooMany (Goats n) = tooMany n
 
 instance TooMany (Int, String) where
-    tooMany (n, s) = n > 42
+    tooMany (n, _) = tooMany n
 
 instance TooMany (Int, Int) where
-    tooMany (n1, n2) = (n1 + n2)> 42
+    tooMany (n1, n2) = tooMany n1 && tooMany n2
 
-data BigSmall = Big Bool | Small Bool deriving (Eq, Show)
+instance  (Num a, TooMany a) => TooMany(a, a) where
+    tooMany (a, b) = tooMany a || tooMany b
 
 
 
