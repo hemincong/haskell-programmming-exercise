@@ -1,6 +1,8 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 {-# LANGUAGE FlexibleInstances #-}
 
+-- for exrcises:  Logic Goats
+
 module TooMany where
 
 class TooMany a where
