@@ -3,6 +3,7 @@ module Phone where
 import Data.List
 import Data.Char
 import Data.Ord
+
   
 convo :: [String]
 convo = [
@@ -25,6 +26,14 @@ data Button = Button Digit String deriving Show
 
 data DaPhone = DaPhone [Button] deriving Show
 
+maximumBy' :: Ord a => (a -> a -> Ordering) -> [(t, a)] -> (t, a)
+maximumBy' _ [] = error "maximum of empty list"
+maximumBy' f (x:xs) = findMax x xs
+      where findMax currMax [] = currMax
+            findMax (t, a) (p:ps)
+                | f a ( snd p ) == LT = findMax p ps
+                | otherwise = findMax (t, a) ps
+                
 keyBorad :: DaPhone
 keyBorad = DaPhone [
             Button '1' "1",     Button '2' "2ABC",  Button '3' "3DEF",
@@ -41,6 +50,9 @@ checkButton (Button c s) ch
             | otherwise = case elemIndex ch s of
                                 Nothing -> []
                                 Just n -> [(c, n+1)]
+                                
+vailChars :: String
+vailChars = ['a'..'z']++['A'..'Z']++"*^+#.,"
 
 reverseTaps :: DaPhone -> Char -> [(Digit, Presses)]
 reverseTaps (DaPhone keys) ch = concatMap (flip checkButton ch) keys
@@ -58,10 +70,15 @@ letterPreses :: Char -> String -> Int
 letterPreses c s = length $ filter (\x -> x == c) s
 
 allLetterPresses :: String -> [(Char, Int)]
-allLetterPresses s = foldr (\c acc -> (c, letterPreses c s) : acc) [] (['a'..'z']++['A'..'Z'])
+allLetterPresses s = foldr (\c acc -> (c, letterPreses c s) : acc) [] vailChars
 
 mostPopularLetter :: String -> Char
-mostPopularLetter = fst . maximumBy (comparing snd) . allLetterPresses 
+mostPopularLetter = fst . maximumBy' compare . allLetterPresses 
 
+coolestLtr :: [String] -> Char
+coolestLtr = fst. minimumBy compare . allLetterPresses . filter (flip elem vailChars) . concat
+
+coolestWord :: [String] -> String
+coolestWord = head . minimumBy (\x y -> compare (length x) (length y)) . group . sort . words . concat
 
 
