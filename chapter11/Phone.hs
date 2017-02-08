@@ -76,9 +76,7 @@ mostPopularLetter :: String -> Char
 mostPopularLetter = fst . maximumBy' compare . allLetterPresses 
 
 coolestLtr :: [String] -> Char
-coolestLtr = fst. minimumBy compare . allLetterPresses . filter (flip elem vailChars) . concat
+coolestLtr = fst. minimumBy compare . allLetterPresses . filter (flip elem vailChars) . concat . map (\s -> s ++ " ")
 
 coolestWord :: [String] -> String
-coolestWord = head . minimumBy (\x y -> compare (length x) (length y)) . group . sort . words . concat
-
-
+coolestWord = head . minimumBy (\x y -> compare (length x) (length y)) . group . sort . words . concat . map (\s -> s ++ " ")
