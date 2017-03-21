@@ -1,0 +1,17 @@
+name: Kicking
+version: 1.0
+cabal-version: 1.11
+build-type: Simple
+license: AllRightsReserved
+stability: experimental
+x-ghc-framework-version: 7.10.3-5.18-2
+x-last-ide-version: HfM1.3.2
+Executable Kicking
+  main-is: Kicking.hs
+  buildable: True
+  build-depends:
+      base -any,
+      QuickCheck -any
+  other-modules:
+      CoArbitrary
+      WordNumberTest
