@@ -1,9 +1,9 @@
 import Optional
+import MonoidCheck
 
 import Data.Monoid
 import Test.Hspec
 import Test.QuickCheck
-
 
 type S = String
 type B = Bool
