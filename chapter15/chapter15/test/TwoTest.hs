@@ -1,6 +1,7 @@
 import Test.QuickCheck(Arbitrary, arbitrary, quickCheck)
 import SemigroupCheck
 import Two
+import MonoidCheck
 
 instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where 
     arbitrary = do
@@ -13,3 +14,5 @@ type TwoAssoc = Two String String -> Two String String -> Two String String -> B
 main :: IO()
 main = do 
     quickCheck (semigroupAssoc :: TwoAssoc ) 
+    quickCheck (monoidLeftIdentity :: Two String String -> Bool ) 
+    quickCheck (monoidRightIdentity :: Two String String -> Bool) 

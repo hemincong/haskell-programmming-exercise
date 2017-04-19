@@ -5,14 +5,11 @@ import Data.Semigroup(Semigroup, (<>))
 newtype BoolConj = BoolConj Bool deriving (Eq, Show)
 
 instance Semigroup BoolConj where
-    (BoolConj True) <> (BoolConj True) = BoolConj True
-    (BoolConj _) <> (BoolConj _) = BoolConj False
+    (BoolConj a) <> (BoolConj b) = BoolConj (a && b)
 
-newtype BoolDisj = BoolDisj Bool deriving (Eq, Show)
-
-instance Semigroup BoolDisj where
-    (BoolDisj False) <> (BoolDisj False) = BoolDisj False
-    (BoolDisj _) <> (BoolDisj _) = BoolDisj True
+instance Monoid BoolConj where
+    mempty = BoolConj True
+    mappend = (<>)
 
 data Or a b = Fst a | Snd b deriving (Eq, Show)
 

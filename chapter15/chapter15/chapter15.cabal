@@ -16,6 +16,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Optional
+                      , Mem
                       , MonoidCheck
                       , First
                       , Two
@@ -25,6 +26,8 @@ library
                       , Validation
                       , Trivial
                       , BoolConj
+                      , BoolDisj
+                      , Combine
                       , SemigroupCheck
   build-depends:       base >= 4.7 && < 5
   default-language:    Haskell2010
@@ -127,6 +130,17 @@ test-suite chapter15-semigroupTest
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             SemigroupTest.hs
+  build-depends:       base
+                     , chapter15
+                     , hspec
+                     , QuickCheck
+  ghc-options:         -threaded -rtsopts -with-rtsopts=-N
+  default-language:    Haskell2010
+
+test-suite chapter15-BoolDisjTest
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             BoolDisjTest.hs
   build-depends:       base
                      , chapter15
                      , hspec
