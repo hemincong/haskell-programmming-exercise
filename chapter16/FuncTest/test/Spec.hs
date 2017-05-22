@@ -2,6 +2,7 @@
 
 import Test.QuickCheck
 import Test.QuickCheck.Function
+import Control.Monad
 
 import Lib
 
@@ -125,6 +126,15 @@ type Four1String = Four1 String String -> Bool
 
 type Four1FC = Four1 Int Int-> IntToInt -> IntToInt -> Bool
 
+-- Possibly
+
+instance (Arbitrary a) => Arbitrary (Possibly a) where
+    arbitrary = frequency [(1, return LolNope), (3, liftM Yeppers arbitrary)]
+
+type PossiblyString  = Possibly String -> Bool
+
+type PossiblyFC = Possibly Int -> IntToInt -> IntToInt -> Bool
+
 main :: IO ()
 main = do 
     quickCheck (functorCompose  :: IntFC)
@@ -143,3 +153,7 @@ main = do
     quickCheck (functorIdentity :: FourString)
     quickCheck (functorCompose  :: Four1FC)
     quickCheck (functorIdentity :: Four1String)
+    quickCheck (functorCompose  :: PossiblyFC)
+    quickCheck (functorIdentity :: PossiblyString)
+    putStrLn $ show $ fmap (+1) (L 1 2 3)
+    putStrLn $ show $ fmap (+1) (R 1 2 3)
