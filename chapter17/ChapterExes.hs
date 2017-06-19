@@ -101,3 +101,78 @@ instance (Eq a, Eq b, Eq c) => EqProp (Three a b c) where
 
 testThreeProp :: IO()
 testThreeProp = quickBatch(applicative (undefined :: Three String String (String, String, String)))
+
+data Three1 a b = Three1 a b b deriving (Eq, Show)
+
+instance Functor (Three1 a) where
+    fmap f (Three1 a b1 b2) = Three1 a (f b1) (f b2)
+
+instance Monoid a => Applicative (Three1 a) where
+    pure b = Three1 mempty b b
+    (<*>) (Three1 a1 f1 f2) (Three1 a2 b1 b2) = Three1 (a1<>a2) (f1 b1) (f2 b2)
+
+genThree1 :: (Arbitrary a, Arbitrary b) => Gen (Three1 a b)
+genThree1 = do
+    a <- arbitrary
+    b <- arbitrary
+    return (Three1 a b b)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Three1 a b) where
+    arbitrary = genThree1
+
+instance (Eq a, Eq b) => EqProp (Three1 a b ) where
+    (=-=) = eq
+
+testThree1Prop :: IO()
+testThree1Prop = quickBatch(applicative (undefined :: Three String String (String, String, String)))
+
+data Four a b c d = Four a b c d deriving (Eq, Show)
+
+instance Functor (Four a b c ) where
+    fmap f (Four a b c d) = Four a b c (f d)
+
+instance (Monoid a, Monoid b, Monoid c) => Applicative (Four a b c) where
+    pure = Four mempty mempty mempty
+    (<*>) (Four a1 b1 c1 f1) (Four a2 b2 c2 d2) = Four (a1<>a2) (b1 <> b2) (c1 <> c2) (f1 d2)
+
+genFour :: (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) => Gen (Four a b c d)
+genFour = do
+    a <- arbitrary
+    b <- arbitrary
+    c <- arbitrary
+    d <- arbitrary
+    return (Four a b c d)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) => Arbitrary (Four a b c d) where
+    arbitrary = genFour
+
+instance (Eq a, Eq b, Eq c, Eq d) => EqProp (Four a b c d) where
+    (=-=) = eq
+
+testFourProp :: IO()
+testFourProp = quickBatch(applicative (undefined :: Four String String String (String, String, String)))
+
+
+data Four1 a b = Four1 a a a b deriving (Eq, Show)
+
+instance Functor (Four1 a) where
+    fmap f (Four1 a1 a2 a3 b)  = Four1 a1 a2 a3 (f b)
+
+instance (Monoid a) => Applicative (Four1 a) where
+    pure = Four1 mempty mempty mempty
+    (<*>) (Four1 a1 a2 a3 f1) (Four1 a4 a5 a6 b1) = Four1 (a1<>a4) (a2<>a5) (a3<>a6) (f1 b1)
+
+genFour1 :: (Arbitrary a, Arbitrary b) => Gen (Four1 a b)
+genFour1 = do
+    a <- arbitrary
+    b <- arbitrary
+    return (Four1 a a a b)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Four1 a b) where
+    arbitrary = genFour1
+
+instance (Eq a, Eq b) => EqProp (Four1 a b) where
+    (=-=) = eq
+
+testFour1Prop :: IO()
+testFour1Prop = quickBatch(applicative (undefined :: Four1 String (String, String, String)))
